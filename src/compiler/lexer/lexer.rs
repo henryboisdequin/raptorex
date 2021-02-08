@@ -1,4 +1,4 @@
-use crate::compiler::lexer::tokens::Token;
+use crate::compiler::lexer::tokens::{Token, DATA_TYPES, KEYWORDS};
 use crate::compiler::utils::*;
 
 pub struct Lexer<'a> {
@@ -20,7 +20,7 @@ impl<'a> Lexer<'a> {
         }
     }
 
-    fn current_char(&mut self) -> char {
+    fn next_char(&mut self) -> char {
         self.code.chars().nth(self.current_pos).unwrap_or('\0')
     }
 
@@ -64,7 +64,7 @@ impl<'a> Lexer<'a> {
                 if x.is_digit(10) {
                     self.make_number();
                 } else {
-                    self.add_identifier();
+                    self.add_other();
                 }
             }
         }
@@ -73,11 +73,11 @@ impl<'a> Lexer<'a> {
     fn make_string(&mut self) {
         let mut string = String::new();
 
-        while !self.is_end() && self.current_char() != '"' {
-            if self.current_char() == '\n' {
+        while !self.is_end() && self.next_char() != '"' {
+            if self.next_char() == '\n' {
                 self.line += 1;
             } else {
-                string += self.current_char().encode_utf8(&mut [0; 4]);
+                string += self.next_char().encode_utf8(&mut [0; 4]);
             }
             self.advance();
         }
@@ -89,16 +89,16 @@ impl<'a> Lexer<'a> {
     fn make_number(&mut self) {
         let mut dot_count = 0;
 
-        while self.current_char().is_ascii_alphanumeric() && !self.is_end() {
+        while self.next_char().is_ascii_alphanumeric() && !self.is_end() {
             self.advance();
         }
 
-        if self.current_char() == '.' {
+        if self.next_char() == '.' {
             dot_count += 1;
             self.advance();
         }
 
-        while self.current_char().is_ascii_alphanumeric() && !self.is_end() {
+        while self.next_char().is_ascii_alphanumeric() && !self.is_end() {
             self.advance();
         }
 
@@ -115,7 +115,7 @@ impl<'a> Lexer<'a> {
         let mut is_less_than = true;
         self.advance();
 
-        if self.current_char() == '=' {
+        if self.next_char() == '=' {
             is_less_than = false;
             self.advance();
         }
@@ -131,7 +131,7 @@ impl<'a> Lexer<'a> {
         let mut is_greater_than = true;
         self.advance();
 
-        if self.current_char() == '=' {
+        if self.next_char() == '=' {
             is_greater_than = false;
             self.advance();
         }
@@ -205,24 +205,47 @@ impl<'a> Lexer<'a> {
         }
     }
 
-    fn add_identifier(&mut self) {
-        while !is_whitespace_or_end(self.current_char()) && !self.is_end() {
+    fn add_other(&mut self) {
+        let mut colon = false;
+        let mut is_data_type = false;
+
+        while !is_whitespace_or_end(self.next_char()) && !self.is_end() {
             self.advance();
         }
 
-        let full = &self.code[self.start_pos..self.current_pos];
+        let mut full = &self.code[self.start_pos..self.current_pos];
 
         match full {
             "true" => self.add_token(Token::Bool(true)),
             "false" => self.add_token(Token::Bool(false)),
-            _ => self.add_token(Token::Identifier(full)),
+            _ => {
+                if KEYWORDS.contains(&full) {
+                    self.add_token(Token::Keyword(full));
+                } else if DATA_TYPES.contains(&full) {
+                    self.add_token(Token::Datatype(full));
+                } else {
+                    if full.chars().collect::<Vec<char>>()[full.len() - 1] == ':' {
+                        colon = true;
+                    }
+
+                    if colon == true {
+                        full = &full[0..full.len() - 1];
+                    }
+
+                    self.add_token(Token::Identifier(full));
+
+                    if colon {
+                        self.add_token(Token::Colon);
+                    }
+                }
+            }
         };
     }
 
     fn skip_comment(&mut self) {
         self.advance();
 
-        while self.current_char() != '\n' {
+        while self.next_char() != '\n' {
             self.advance();
         }
     }

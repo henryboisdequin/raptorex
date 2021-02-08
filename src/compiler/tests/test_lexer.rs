@@ -12,12 +12,12 @@ mod test_lexer {
     }
 
     #[test]
-    fn create_identifiers() {
+    fn create_normal_fn() {
         let mut lexer = Lexer::new("fn main() -> [] {\n[]\n}");
         assert_eq!(
             lexer.tokens(),
             vec![
-                Token::Identifier("fn"),
+                Token::Keyword("fn"),
                 Token::Identifier("main"),
                 Token::LeftParen,
                 Token::RightParen,
@@ -27,6 +27,31 @@ mod test_lexer {
                 Token::LeftBrace,
                 Token::LeftBracket,
                 Token::RightBracket,
+                Token::RightBrace,
+            ]
+        );
+    }
+
+    #[test]
+    fn create_normal_program() {
+        let mut lexer = Lexer::new("fn main() -> num {\nfoobar: num = 1\n=> foobar\n}");
+        assert_eq!(
+            lexer.tokens(),
+            vec![
+                Token::Keyword("fn"),
+                Token::Identifier("main"),
+                Token::LeftParen,
+                Token::RightParen,
+                Token::ThinArrow,
+                Token::Datatype("num"),
+                Token::LeftBrace,
+                Token::Identifier("foobar"),
+                Token::Colon,
+                Token::Datatype("num"),
+                Token::Eq,
+                Token::Num(1),
+                Token::FatArrow,
+                Token::Identifier("foobar"),
                 Token::RightBrace,
             ]
         );
@@ -112,6 +137,21 @@ mod test_lexer {
                 Token::Num(3),
                 Token::Pow,
                 Token::Num(101)
+            ]
+        );
+    }
+
+    #[test]
+    fn create_data_types() {
+        let mut lexer = Lexer::new("bool num String Vec dec");
+        assert_eq!(
+            lexer.tokens(),
+            vec![
+                Token::Datatype("bool"),
+                Token::Datatype("num"),
+                Token::Datatype("String"),
+                Token::Datatype("Vec"),
+                Token::Datatype("dec")
             ]
         );
     }

@@ -1,5 +1,12 @@
 use std::fmt::*;
 
+pub const KEYWORDS: [&'static str; 19] = [
+    "struct", "impl", "fn", "import", "self", "if", "elif", "else", "while", "for", "in", "break",
+    "continue", "match", "is", "as", "not", "or", "and",
+];
+
+pub const DATA_TYPES: [&'static str; 5] = ["num", "dec", "bool", "Vec", "String"];
+
 /// Tokens in the Raptorex programming language.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Token<'a> {
@@ -10,6 +17,11 @@ pub enum Token<'a> {
     Bool(bool),
     // Identifiers, e.g. variable, function names, keywords
     Identifier(&'a str),
+    // Keywords, e.g. struct, impl, as
+    Keyword(&'a str),
+    // Data types, usually these tokens reference a return/variable type
+    // e.g. foo: **String** = "foo"
+    Datatype(&'a str),
     // Operators, e.g +, -, *, /
     Add,
     Sub,
@@ -17,26 +29,6 @@ pub enum Token<'a> {
     Div,
     Modulo,
     Pow,
-    // Keywords, e.g. fn, struct, etc
-    // Struct,
-    // Impl,
-    // Import,
-    // Fn,
-    // This,
-    // If,
-    // Else,
-    // Elif,
-    // While,
-    // For,
-    // In,
-    // Break,
-    // Continue,
-    // Match,
-    // Is,
-    // As,
-    // Not,
-    // Or,
-    // And,
     // Common syntax, e.g. =>, =, :=, (
     ThinArrow,
     FatArrow,
@@ -69,6 +61,11 @@ impl Display for Token<'_> {
             Token::Bool(b) => write!(f, "{}", b)?,
             // Identifiers, e.g. variable, function names
             Token::Identifier(i) => write!(f, "{}", i)?,
+            // Keywords, e.g. struct, impl, as
+            Token::Keyword(k) => write!(f, "{}", k)?,
+            // Data types, usually these tokens reference a return/variable type
+            // e.g. foo: **String** = "foo"
+            Token::Datatype(dt) => write!(f, "{}", dt)?,
             // Operators, e.g +, -, *, /
             Token::Add => write!(f, "+")?,
             Token::Sub => write!(f, "-")?,
@@ -76,26 +73,6 @@ impl Display for Token<'_> {
             Token::Div => write!(f, "/")?,
             Token::Modulo => write!(f, "%")?,
             Token::Pow => write!(f, "^")?,
-            // Keywords, e.g. fn, struct, etc
-            // Token::Struct => write!(f, "struct")?,
-            // Token::Impl => write!(f, "impl")?,
-            // Token::Import => write!(f, "import")?,
-            // Token::Fn => write!(f, "fn")?,
-            // Token::This => write!(f, "self")?,
-            // Token::If => write!(f, "if")?,
-            // Token::Else => write!(f, "else")?,
-            // Token::Elif => write!(f, "elif")?,
-            // Token::While => write!(f, "while")?,
-            // Token::For => write!(f, "for")?,
-            // Token::In => write!(f, "in")?,
-            // Token::Break => write!(f, "break")?,
-            // Token::Continue => write!(f, "continue")?,
-            // Token::Match => write!(f, "match")?,
-            // Token::Is => write!(f, "is")?,
-            // Token::As => write!(f, "as")?,
-            // Token::Not => write!(f, "not")?,
-            // Token::Or => write!(f, "or")?,
-            // Token::And => write!(f, "and")?,
             // Common syntax, e.g. =>, =, :=, (
             Token::ThinArrow => write!(f, "->")?,
             Token::FatArrow => write!(f, "=>")?,
