@@ -1,8 +1,6 @@
-[package]
-name = "raptorex"
-version = "0.1.0-alpha"
-authors = ["Henry Boisdequin <boisdequinhenry19@gmail.com>"]
-edition = "2018"
+[workspace]
 
-[dependencies]
-rustyline = "7.1.0"
+members = [
+    "raptorex",
+    "compiler",
+]

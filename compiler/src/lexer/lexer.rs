@@ -1,5 +1,5 @@
-use crate::compiler::lexer::tokens::{Token, DATA_TYPES, KEYWORDS};
-use crate::compiler::utils::*;
+use crate::lexer::tokens::{Token, DATA_TYPES, KEYWORDS};
+use crate::util::*;
 
 pub struct Lexer<'a> {
     code: &'a str,
@@ -207,7 +207,6 @@ impl<'a> Lexer<'a> {
 
     fn add_other(&mut self) {
         let mut colon = false;
-        let mut is_data_type = false;
 
         while !is_whitespace_or_end(self.next_char()) && !self.is_end() {
             self.advance();

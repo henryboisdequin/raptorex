@@ -1,6 +1,7 @@
-.vscode/
-
-
-# Added by cargo
-
+# Rust/Cargo
 /target
+/debug
+**/*.rs.bk
+
+# Dev enviorment
+.vscode/

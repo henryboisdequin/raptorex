@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test_lexer {
-    use crate::compiler::lexer::{lexer::Lexer, tokens::Token};
+    use crate::lexer::{lexer::Lexer, tokens::Token};
 
     #[test]
     fn create_string() {
