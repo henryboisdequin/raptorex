@@ -1,6 +1,6 @@
 [package]
-name = "raptorex"
-version = "0.1.0-alpha"
+name = "core"
+version = "0.1.0"
 authors = ["Henry Boisdequin <boisdequinhenry19@gmail.com>"]
 edition = "2018"
 

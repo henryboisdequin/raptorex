@@ -1,4 +1,5 @@
-use crate::lexer::tokens::{Token, DATA_TYPES, KEYWORDS};
+use crate::lexer::tokens::Token;
+use crate::util::types::{DATA_TYPES, KEYWORDS};
 use crate::util::*;
 
 pub struct Lexer<'a> {
@@ -47,6 +48,7 @@ impl<'a> Lexer<'a> {
             '}' => self.add_token(Token::RightBrace),
             '[' => self.add_token(Token::LeftBracket),
             ']' => self.add_token(Token::RightBracket),
+            ';' => self.add_token(Token::SemiColon),
             '"' => self.make_string(),
             '#' => self.skip_comment(),
             '=' => self.make_equals(),

@@ -1,15 +1,4 @@
-#[derive(Clone, PartialEq, Debug)]
-pub enum Types<'a> {
-    Scope,
-    Num(i32),
-    Dec(f32),
-    Bool(bool),
-    Vec(Vec<Types<'a>>),
-    String(String),
-    FunctionCall(&'a str),
-    Keyword(&'a str),
-    Identifier(&'a str),
-}
+use crate::util::types::Types;
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Node<'a> {
@@ -40,6 +29,8 @@ impl<'a> Types<'a> {
             Self::Vec(_) => "Vec",
             Self::String(_) => "String",
             Self::FunctionCall(_) => "function call",
+            Self::Operator(_) => "operator",
+            Self::CommonSyntax(_) => "common syntax",
             Self::Keyword(keyword) => keyword,
             Self::Identifier(_) => "identifier",
         }

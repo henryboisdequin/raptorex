@@ -1,9 +1,9 @@
-use crate::{
-    lexer::tokens::{Token, DATA_TYPES, KEYWORDS},
-    parser::node::{Node, Types},
-};
-#[macro_use]
+// TODO
+
+use crate::lexer::tokens::Token;
+use crate::parser::node::Node;
 use crate::throw_error;
+use crate::util::types::Types;
 use crate::util::*;
 
 pub struct Parser<'a> {
@@ -42,8 +42,12 @@ impl<'a> Parser<'a> {
         let current_token = self.advance();
         let mut node = match current_token {
             Token::Identifier(s) => Node::new(Types::FunctionCall(s)),
+            Token::Keyword(k) => Node::new(Types::Keyword(k)),
             _ => return Err(throw_error!("Unexpected token:", current_token)),
         };
+
+        while !self.is_end() && self.next_token() != Some(Token::SemiColon) {}
+
         todo!()
     }
 

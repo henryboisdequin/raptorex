@@ -1,6 +1,20 @@
-[workspace]
+[package]
+name = "raptorex"
+version = "0.1.0"
+authors = ["Henry Boisdequin <boisdequinhenry@gmail.com>"]
+edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "TBD"
+repository = "https://github.com/henryboisdequin/raptorex"
+documentation = "https://docs.rs/tbd"
+categories = ["tbd"]
+readme = "README.md"
 
+[dependencies]
+compiler = { version = "0.1.0", path = "compiler" }
+
+[workspace]
 members = [
-    "raptorex",
+    "core",
     "compiler",
 ]

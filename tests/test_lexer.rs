@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test_lexer {
-    use crate::lexer::{lexer::Lexer, tokens::Token};
+    use compiler::lexer::{lexer::Lexer, tokens::Token};
 
     #[test]
     fn create_string() {
@@ -34,7 +34,7 @@ mod test_lexer {
 
     #[test]
     fn create_normal_program() {
-        let mut lexer = Lexer::new("fn main() -> num {\nfoobar: num = 1\n=> foobar\n}");
+        let mut lexer = Lexer::new("fn main() -> num {\nfoobar: num = 1;\n=> foobar;\n}");
         assert_eq!(
             lexer.tokens(),
             vec![
@@ -50,8 +50,10 @@ mod test_lexer {
                 Token::Datatype("num"),
                 Token::Eq,
                 Token::Num(1),
+                Token::SemiColon,
                 Token::FatArrow,
                 Token::Identifier("foobar"),
+                Token::SemiColon,
                 Token::RightBrace,
             ]
         );
@@ -101,7 +103,7 @@ mod test_lexer {
 
     #[test]
     fn common_syntax() {
-        let mut lexer = Lexer::new(", = -> =!= >");
+        let mut lexer = Lexer::new(", = -> =!= >;");
         assert_eq!(
             lexer.tokens(),
             vec![
@@ -109,7 +111,8 @@ mod test_lexer {
                 Token::Eq,
                 Token::ThinArrow,
                 Token::EqBangEq,
-                Token::Gt
+                Token::Gt,
+                Token::SemiColon,
             ]
         );
     }

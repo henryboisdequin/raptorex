@@ -1,7 +1,7 @@
 mod test_error {
-    use crate::util::RaptorexError;
+    use compiler::util::RaptorexError;
     #[macro_use]
-    use crate::throw_error;
+    use compiler::util::throw_error;
 
     #[test]
     fn test_error() {

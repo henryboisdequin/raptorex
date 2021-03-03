@@ -1,12 +1,5 @@
 use std::fmt::*;
 
-pub const KEYWORDS: [&'static str; 19] = [
-    "struct", "impl", "fn", "import", "self", "if", "elif", "else", "while", "for", "in", "break",
-    "continue", "match", "is", "as", "not", "or", "and",
-];
-
-pub const DATA_TYPES: [&'static str; 5] = ["num", "dec", "bool", "Vec", "String"];
-
 /// Tokens in the Raptorex programming language.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Token<'a> {
@@ -42,6 +35,7 @@ pub enum Token<'a> {
     Ge,
     Dot,
     Colon,
+    SemiColon,
     LeftParen,
     RightParen,
     LeftBrace,
@@ -86,8 +80,10 @@ impl Display for Token<'_> {
             Token::Ge => write!(f, ">=")?,
             Token::Dot => write!(f, ".")?,
             Token::Colon => write!(f, ":")?,
+            Token::SemiColon => write!(f, ";")?,
             Token::LeftParen => write!(f, "(")?,
             Token::RightParen => write!(f, ")")?,
+            // need to escape left and right brace
             Token::LeftBrace => write!(f, "{{")?,
             Token::RightBrace => write!(f, "}}")?,
             Token::LeftBracket => write!(f, "[")?,

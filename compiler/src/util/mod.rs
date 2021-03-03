@@ -1,22 +1,10 @@
+use crate::util::error::RaptorexError;
 pub mod error;
+pub mod types;
 
 // Util structs + types
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct RaptorexError<'a> {
-    pub message: String,
-    pub line: u32,
-    pub file: &'a str,
-}
-
 pub type RaptorexResult<'a, T> = std::result::Result<T, RaptorexError<'a>>;
-
-impl std::fmt::Display for RaptorexError<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Error: {} {}:{}", self.message, self.file, self.line)?;
-        Ok(())
-    }
-}
 
 // Util functions
 
